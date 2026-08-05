@@ -32,7 +32,10 @@ import {
   ChevronRight,
   Maximize2,
   Play,
-  Pause
+  Pause,
+  Bot,
+  Send,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -67,6 +70,14 @@ interface ShowcasePoster {
   description: string;
   url: string;
   highlights: string[];
+}
+
+// Define Chat Message structure for OXIXO Agent
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'model';
+  text: string;
+  timestamp: Date;
 }
 
 // 9 High-Converting Premium Poster templates shared by the user
@@ -248,11 +259,26 @@ export default function App() {
   const [modalIsSubmitting, setModalIsSubmitting] = useState<boolean>(false);
   const [modalSubmitError, setModalSubmitError] = useState<string | null>(null);
   const [modalLastSubmittedLead, setModalLastSubmittedLead] = useState<Lead | null>(null);
+  const [modalCloseAllowed, setModalCloseAllowed] = useState<boolean>(false);
+  const [modalSecondsLeft, setModalSecondsLeft] = useState<number>(20);
 
   // Poster Showcase Carousel States
   const [activePosterIndex, setActivePosterIndex] = useState<number>(0);
   const [isAutoplayActive, setIsAutoplayActive] = useState<boolean>(true);
   const [zoomedPosterUrl, setZoomedPosterUrl] = useState<string | null>(null);
+
+  // OXIXO Agent Chat State
+  const [chatIsOpen, setChatIsOpen] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: 'welcome',
+      role: 'model',
+      text: "Hi there! I am **OXIXO Agent**, your expert AI growth advisor. 🚀\n\nWhether you want to know how our ₹10,000 Complete Growth Bundle can scale your business leads, learn about our high-converting **Creative Poster Designs**, understand how our **AI Videos** work, or build a custom campaign — I'm here to answer any doubts!\n\nHow can I help you scale today?",
+      timestamp: new Date()
+    }
+  ]);
+  const [chatInputValue, setChatInputValue] = useState<string>('');
+  const [chatIsLoading, setChatIsLoading] = useState<boolean>(false);
   
   // UI States
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -298,17 +324,43 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // 7-second automatic lead capture popup effect
+  // 4-second automatic lead capture popup effect - triggers on reload for testing
   useEffect(() => {
-    const hasClosedOrSubmitted = sessionStorage.getItem('oxixo_popup_shown') === 'true';
-    if (!hasClosedOrSubmitted) {
-      const popupTimer = setTimeout(() => {
-        setShowModal(true);
-        sessionStorage.setItem('oxixo_popup_shown', 'true');
-      }, 7000);
-      return () => clearTimeout(popupTimer);
-    }
+    const popupTimer = setTimeout(() => {
+      setShowModal(true);
+    }, 4000);
+    return () => clearTimeout(popupTimer);
   }, []);
+
+  // Track 20-second delay for popup close button
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    let countdownInterval: NodeJS.Timeout;
+
+    if (showModal) {
+      setModalCloseAllowed(false);
+      setModalSecondsLeft(20);
+
+      countdownInterval = setInterval(() => {
+        setModalSecondsLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      timer = setTimeout(() => {
+        setModalCloseAllowed(true);
+      }, 20000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(countdownInterval);
+    };
+  }, [showModal]);
 
   // Poster Showcase Autoplay effect
   useEffect(() => {
@@ -318,6 +370,98 @@ export default function App() {
     }, 4500);
     return () => clearInterval(interval);
   }, [isAutoplayActive]);
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom of chat
+  useEffect(() => {
+    if (chatIsOpen && chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, chatIsOpen, chatIsLoading]);
+
+  const handleSendChatMessage = async (textToSend?: string) => {
+    const query = (textToSend || chatInputValue).trim();
+    if (!query) return;
+
+    // Clear input
+    if (!textToSend) {
+      setChatInputValue('');
+    }
+
+    // Add user message
+    const userMsg: ChatMessage = {
+      id: `msg-${Date.now()}-user`,
+      role: 'user',
+      text: query,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMsg]);
+    setChatIsLoading(true);
+
+    try {
+      // Map history to server schema
+      const historyPayload = chatMessages.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: query,
+          history: historyPayload
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error('Could not get response from OXIXO Agent');
+      }
+
+      const data = await res.json();
+      
+      const agentMsg: ChatMessage = {
+        id: `msg-${Date.now()}-agent`,
+        role: 'model',
+        text: data.text || "I am here to help you grow! Please feel free to ask details about our packages.",
+        timestamp: new Date()
+      };
+
+      setChatMessages(prev => [...prev, agentMsg]);
+    } catch (err: any) {
+      console.error(err);
+      const errorMsg: ChatMessage = {
+        id: `msg-${Date.now()}-error`,
+        role: 'model',
+        text: "⚠️ Sorry, I'm having trouble connecting to my central marketing core right now. Please feel free to check our services or tap the WhatsApp button to chat directly!",
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setChatIsLoading(false);
+    }
+  };
+
+  const handleChatKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSendChatMessage();
+    }
+  };
+
+  const handleClearChat = () => {
+    setChatMessages([
+      {
+        id: 'welcome',
+        role: 'model',
+        text: "Hi there! I am **OXIXO Agent**, your expert AI growth advisor. 🚀\n\nWhether you want to know how our ₹10,000 Complete Growth Bundle can scale your business leads, learn about our high-converting **Creative Poster Designs**, understand how our **AI Videos** work, or build a custom campaign — I'm here to answer any doubts!\n\nHow can I help you scale today?",
+        timestamp: new Date()
+      }
+    ]);
+  };
 
   // Toggle single service
   const handleToggleService = (id: string) => {
@@ -543,6 +687,16 @@ export default function App() {
 
     setModalIsSubmitting(false);
     setModalIsSubmitted(true);
+
+    // Prepare direct self-WhatsApp link and open/redirect automatically
+    const waMsgText = `Hello OXIXO Team! I've successfully submitted my details through the popup for *${newLead.fullName}* (${newLead.businessName || 'No Business Name'}). Let's discuss growing my business with your Growth Bundle!`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=918590181381&text=${encodeURIComponent(waMsgText)}`;
+    
+    try {
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    } catch (e) {
+      window.location.href = whatsappUrl;
+    }
   };
 
   // Clear a single lead from admin
@@ -2127,14 +2281,21 @@ export default function App() {
               transition={{ type: "spring", duration: 0.4 }}
               className="bg-white w-full max-w-md rounded-3xl border-2 border-[#D4AF37] overflow-hidden shadow-2xl relative text-[#1A1A1A] p-6 md:p-8"
             >
-              {/* Close Button */}
-              <button 
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all cursor-pointer"
-                aria-label="Close modal"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              {/* Close Button or Delay Timer */}
+              {modalCloseAllowed ? (
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              ) : (
+                <div className="absolute top-4 right-4 text-[10px] font-black text-[#D4AF37] bg-slate-950 px-3 py-1 rounded-full border border-[#D4AF37]/30 flex items-center gap-1.5 select-none shadow-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+                  <span>Close in {modalSecondsLeft}s</span>
+                </div>
+              )}
 
               {!modalIsSubmitted ? (
                 <form onSubmit={handleModalFormSubmit} className="space-y-4 mt-2">
@@ -2270,12 +2431,14 @@ export default function App() {
                     </a>
 
                     {/* Secondary Close Button */}
-                    <button
-                      onClick={() => setShowModal(false)}
-                      className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs transition-all cursor-pointer border border-slate-200"
-                    >
-                      Close & Keep Browsing
-                    </button>
+                    {modalCloseAllowed && (
+                      <button
+                        onClick={() => setShowModal(false)}
+                        className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs transition-all cursor-pointer border border-slate-200"
+                      >
+                        Close & Keep Browsing
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -2326,8 +2489,223 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Floating Sticky WhatsApp Quick Chat Button */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
+      {/* OXIXO AI Agent Chat Drawer */}
+      <AnimatePresence>
+        {chatIsOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed bottom-24 right-6 z-50 w-[92vw] sm:w-[420px] h-[550px] bg-[#1A1A1A] border border-[#D4AF37]/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-white"
+          >
+            {/* Drawer Header */}
+            <div className="bg-slate-950 px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F33A6A] p-0.5 flex items-center justify-center">
+                    <img 
+                      src="https://i.ibb.co/v4GvfMrr/Chat-GPT-Image-Jul-6-2026-07-57-53-AM.png" 
+                      alt="OXIXO AI Logo" 
+                      className="w-full h-full rounded-full object-contain p-0.5 bg-slate-950"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  {/* Active pulsing green indicator */}
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-[#25D366] rounded-full border-2 border-slate-950 animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="font-extrabold text-sm tracking-wide text-white">OXIXO Agent</h3>
+                    <span className="bg-emerald-500/15 text-emerald-400 text-[9px] font-black uppercase px-1.5 py-0.5 rounded border border-emerald-500/20">AI Online</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-medium">Your expert marketing advisor</p>
+                </div>
+              </div>
+
+              {/* Header Action Buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleClearChat}
+                  className="p-2 text-slate-400 hover:text-rose-400 rounded-full hover:bg-slate-900 transition-colors cursor-pointer"
+                  title="Clear Conversation History"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setChatIsOpen(false)}
+                  className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-900 transition-colors cursor-pointer"
+                  title="Close AI Chat"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Conversation Log Area */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-900/60 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+              {chatMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} items-start gap-2.5`}
+                >
+                  {msg.role === 'model' && (
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F33A6A] p-0.5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Bot className="w-full h-full text-white p-1" />
+                    </div>
+                  )}
+
+                  <div className={`max-w-[82%] rounded-2xl px-4 py-3 text-xs md:text-sm font-medium leading-relaxed shadow-md ${
+                    msg.role === 'user'
+                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#C19C2B] text-slate-950 rounded-tr-none'
+                      : 'bg-slate-950/80 text-slate-200 border border-slate-800 rounded-tl-none'
+                  }`}>
+                    {/* Format text inside bubble */}
+                    {msg.role === 'user' ? (
+                      <p className="whitespace-pre-wrap">{msg.text}</p>
+                    ) : (
+                      <div className="space-y-1">
+                        {(() => {
+                          return msg.text.split('\n').map((paragraph, index) => {
+                            if (!paragraph.trim()) return <div key={index} className="h-1.5" />;
+                            
+                            const isListItem = paragraph.trim().startsWith('-') || paragraph.trim().startsWith('*') || /^\d+\./.test(paragraph.trim());
+                            
+                            // Remove lead list character if present
+                            let textToParse = paragraph;
+                            if (paragraph.trim().startsWith('-')) textToParse = paragraph.trim().substring(1).trim();
+                            else if (paragraph.trim().startsWith('*')) textToParse = paragraph.trim().substring(1).trim();
+                            
+                            const parts = textToParse.split(/(\*\*.*?\*\*)/);
+                            const content = parts.map((part, i) => {
+                              if (part.startsWith('**') && part.endsWith('**')) {
+                                return <strong key={i} className="font-extrabold text-[#D4AF37]">{part.slice(2, -2)}</strong>;
+                              }
+                              return part;
+                            });
+
+                            if (isListItem) {
+                              return (
+                                <div key={index} className="flex gap-2 pl-1.5 my-1 text-slate-300">
+                                  <span className="text-[#D4AF37] select-none">•</span>
+                                  <span>{content}</span>
+                                </div>
+                              );
+                            }
+
+                            return (
+                              <p key={index} className="text-slate-200 leading-relaxed">
+                                {content}
+                              </p>
+                            );
+                          });
+                        })()}
+                      </div>
+                    )}
+                    
+                    <span className={`block text-[9px] mt-1.5 opacity-60 text-right ${
+                      msg.role === 'user' ? 'text-slate-900' : 'text-slate-400'
+                    }`}>
+                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {/* Chat loading state */}
+              {chatIsLoading && (
+                <div className="flex justify-start items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#F33A6A] p-0.5 flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-full h-full text-white p-1" />
+                  </div>
+                  <div className="bg-slate-950/85 border border-slate-800 text-slate-400 rounded-2xl rounded-tl-none px-4 py-3 flex items-center gap-1.5">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#D4AF37]" />
+                    <span className="text-xs font-semibold tracking-wider">OXIXO Agent is thinking...</span>
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Suggested Question Chips */}
+            {!chatIsLoading && (
+              <div className="px-4 py-2 bg-slate-950/90 border-t border-slate-800/80 flex gap-2 overflow-x-auto scrollbar-none whitespace-nowrap">
+                {[
+                  "What is the ₹10k Bundle?",
+                  "Why choose AI Video?",
+                  "How to start?",
+                  "Meta Ads ROI?"
+                ].map((q, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSendChatMessage(q)}
+                    className="bg-slate-900 hover:bg-[#D4AF37] hover:text-slate-950 border border-slate-800 hover:border-[#D4AF37] text-[10px] md:text-xs font-semibold py-1.5 px-3 rounded-full transition-all duration-300 cursor-pointer flex-shrink-0"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Chat Input Field */}
+            <div className="p-4 bg-slate-950 border-t border-slate-800 flex items-center gap-2">
+              <input
+                type="text"
+                value={chatInputValue}
+                onChange={(e) => setChatInputValue(e.target.value)}
+                onKeyDown={handleChatKeyDown}
+                placeholder="Ask about pricing, bundle, designs..."
+                className="flex-1 bg-slate-900 border border-slate-800 focus:border-[#D4AF37] transition-all rounded-xl px-4 py-3 text-sm focus:outline-none text-white placeholder-slate-500 font-medium"
+                disabled={chatIsLoading}
+              />
+              <button
+                onClick={() => handleSendChatMessage()}
+                disabled={chatIsLoading || !chatInputValue.trim()}
+                className="bg-[#D4AF37] hover:bg-[#C19C2B] disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 p-3 rounded-xl transition-all shadow-lg flex items-center justify-center cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Sticky Buttons Container */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3.5">
+        {/* Floating Sticky OXIXO AI Agent Button */}
+        <motion.button
+          onClick={() => setChatIsOpen(!chatIsOpen)}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.5 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          className={`relative p-4 rounded-full shadow-2xl flex items-center justify-center cursor-pointer group transition-all duration-300 border-2 ${
+            chatIsOpen 
+              ? 'bg-rose-600 border-white/20 hover:bg-rose-700 text-white' 
+              : 'bg-slate-950 border-[#D4AF37]/50 text-white hover:border-[#D4AF37]'
+          }`}
+          title="Chat with OXIXO AI Agent"
+        >
+          {/* Pulsing indicator ring */}
+          {!chatIsOpen && (
+            <span className="absolute inset-0 rounded-full bg-[#D4AF37] opacity-25 animate-ping pointer-events-none" />
+          )}
+
+          {/* Tooltip text */}
+          <span className="absolute right-14 bg-slate-950 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap border border-[#D4AF37]/30">
+            {chatIsOpen ? "Close AI Support 🤖" : "Ask OXIXO Agent 🤖"}
+          </span>
+
+          {chatIsOpen ? (
+            <X className="w-6 h-6 relative z-10" />
+          ) : (
+            <Bot className="w-6 h-6 relative z-10 text-[#D4AF37]" />
+          )}
+        </motion.button>
+
+        {/* Floating Sticky WhatsApp Quick Chat Button */}
         <motion.a
           href="https://api.whatsapp.com/send?phone=918590181381&text=Hello%20OXIXO%20Team!%20I'd%20love%20to%20discuss%20growing%20my%20business%20with%20your%20services."
           target="_blank"
