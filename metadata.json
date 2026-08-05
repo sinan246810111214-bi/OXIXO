@@ -1,0 +1,6 @@
+{
+  "name": "OXIXO",
+  "description": "Premium Landing Page for OXIXO - AI Powered Digital Marketing Agency, featuring interactive service packages, dynamic price calculations, and an order lead capture system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
