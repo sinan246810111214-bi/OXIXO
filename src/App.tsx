@@ -166,10 +166,10 @@ export default function App() {
       price: 2000,
       originalPrice: 3000,
       bullets: [
-        'Tailored-for-conversion ad layouts',
-        'Custom high-fidelity typography & branding',
-        'Ready for Instagram, Facebook, or Meta Ads',
-        'Source files (.PSD/.Figma) included free'
+        'Beautifully hand-crafted layouts tailored to your business',
+        'Designed with local taste and modern typography in Malayalam & English',
+        'Ready-to-post graphics to capture attention on Instagram and Facebook',
+        'Full editable design source files included completely free'
       ],
       icon: Palette
     },
@@ -180,10 +180,10 @@ export default function App() {
       price: 3000,
       originalPrice: 4500,
       bullets: [
-        'Photorealistic custom AI avatar selection',
-        'Natural-sounding studio voiceover (Hindi/English)',
-        'Full scriptwriting & engaging captions',
-        'Perfect for highly engaging Reels & Meta Ads'
+        'Custom AI avatars that look and speak like real humans',
+        'Warm, natural-sounding studio voiceovers in Malayalam, English, or Hindi',
+        'Story-driven local scripts written in high-converting Malayalam or English',
+        'Highly engaging cinematic reels that people actually love watching'
       ],
       icon: Video
     },
@@ -194,10 +194,10 @@ export default function App() {
       price: 3000,
       originalPrice: 4000,
       bullets: [
-        'Detailed competitor marketing analysis',
-        'Ad spend & conversion funnel health checks',
-        'Direct strategic recommendations',
-        'Dedicated monthly 1-on-1 feedback session'
+        'Simple, easy-to-understand progress updates on how your ads are doing',
+        'Plain-language analysis of how many real inquiries and sales were generated',
+        'Clear and direct advice on what steps to take next',
+        'Friendly monthly 1-on-1 feedback call over phone or Zoom'
       ],
       icon: FileText
     },
@@ -208,10 +208,10 @@ export default function App() {
       price: 4000,
       originalPrice: 6000,
       bullets: [
-        '15 optimized post publish schedule',
-        'Comprehensive bio and profile optimization',
-        'Active community comment & message reply management',
-        'Strategic organic outreach & growth tactics'
+        '15 beautifully curated, human-styled posts scheduled throughout the month',
+        'Complete optimization of your page bio and profile to welcome visitors',
+        'Friendly and responsive reply to comments and messages to build trust',
+        'Authentic organic outreach with direct attention to your target audience'
       ],
       icon: Share2
     },
@@ -222,10 +222,10 @@ export default function App() {
       price: 5000,
       originalPrice: 7500,
       bullets: [
-        'Laser-focused target audience selection',
-        'Pixel, API and custom conversion tracking setup',
-        'Robust A/B creative testing matrix',
-        'Continuous optimization to maximize your ROAS'
+        'Targeting specific towns and audiences in Kerala who are looking for you',
+        'Setup of Facebook pixel, tracking, and custom lead goals step-by-step',
+        'Ongoing test-runs of different poster designs to find the best-performing one',
+        'Daily review of budget efficiency to ensure zero wastage of your hard-earned money'
       ],
       icon: Megaphone
     }
@@ -273,7 +273,7 @@ export default function App() {
     {
       id: 'welcome',
       role: 'model',
-      text: "Hi there! I am **OXIXO Agent**, your expert AI growth advisor. 🚀\n\nWhether you want to know how our ₹10,000 Complete Growth Bundle can scale your business leads, learn about our high-converting **Creative Poster Designs**, understand how our **AI Videos** work, or build a custom campaign — I'm here to answer any doubts!\n\nHow can I help you scale today?",
+      text: "Hello! Welcome to **OXIXO Kerala**! 🌴\n\nI am your friendly growth assistant. We are headquartered in Kerala, combining talented local designers with smart AI tools to grow your business with genuine care.\n\nWhether you'd like to learn about our all-inclusive **₹10,000 Complete Growth Bundle** (incorporating 4 custom posters, 2 AI videos with Malayalam/English voiceovers, daily SMM posting, and full Meta ads targeting setup), configure a custom customizer plan, or have a friendly chat about how to get more quality WhatsApp leads in Kerala—I am here to guide you!\n\nHow can we help your business grow today?",
       timestamp: new Date()
     }
   ]);
@@ -457,7 +457,7 @@ export default function App() {
       {
         id: 'welcome',
         role: 'model',
-        text: "Hi there! I am **OXIXO Agent**, your expert AI growth advisor. 🚀\n\nWhether you want to know how our ₹10,000 Complete Growth Bundle can scale your business leads, learn about our high-converting **Creative Poster Designs**, understand how our **AI Videos** work, or build a custom campaign — I'm here to answer any doubts!\n\nHow can I help you scale today?",
+        text: "Hello! Welcome to **OXIXO Kerala**! 🌴\n\nI am your friendly growth assistant. We are headquartered in Kerala, combining talented local designers with smart AI tools to grow your business with genuine care.\n\nWhether you'd like to learn about our all-inclusive **₹10,000 Complete Growth Bundle** (incorporating 4 custom posters, 2 AI videos with Malayalam/English voiceovers, daily SMM posting, and full Meta ads targeting setup), configure a custom customizer plan, or have a friendly chat about how to get more quality WhatsApp leads in Kerala—I am here to guide you!\n\nHow can we help your business grow today?",
         timestamp: new Date()
       }
     ]);
@@ -798,7 +798,7 @@ export default function App() {
             />
             <div>
               <span className="font-extrabold text-xl tracking-tight text-[#1A1A1A]">OXIXO</span>
-              <span className="text-[10px] block font-bold tracking-widest text-[#D4AF37] uppercase -mt-1">AI Powered Marketing</span>
+              <span className="text-[10px] block font-bold tracking-widest text-[#D4AF37] uppercase -mt-1">Kerala's AI-First Creative Partner</span>
             </div>
           </div>
 
@@ -854,20 +854,20 @@ export default function App() {
           {/* Trust Badge */}
           <div className="inline-flex items-center gap-2 bg-[#F33A6A]/10 border border-[#F33A6A]/20 px-3.5 py-1.5 rounded-full text-xs font-bold text-[#F33A6A] tracking-wide mb-6 animate-pulse">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-            <span>AI-Powered Performance Marketing Ecosystem</span>
+            <span>Kerala-Based Human & AI Collaborative Creative Studio</span>
           </div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-[#1A1A1A] leading-[1.1] mb-6">
-            Complete Marketing Growth
+            Kerala-Based Creative Partners
             <span className="block mt-2 bg-gradient-to-r from-[#D4AF37] via-[#F33A6A] to-[#D4AF37] bg-clip-text text-transparent">
-              All You Need for Your Business
+              Growing Your Business with Real Care
             </span>
           </h1>
 
           {/* Value Subtitle */}
           <p className="text-lg md:text-xl text-slate-500 max-w-3xl mx-auto leading-relaxed mb-10">
-            Forget expensive multi-agency contracts. We combine high-converting design, AI video tech, advanced platform optimization, and rigorous SMM scheduling into a singular high-performing system designed to skyrocket your sales.
+            Operating straight from our headquarters in Kerala, we help local business owners grow. No robotic automation or complex corporate jargon—just beautifully crafted local designs, simple AI character videos, and real human strategy that brings customers directly to your WhatsApp.
           </p>
 
           {/* Massive Offer Banner Card */}
@@ -1509,10 +1509,10 @@ export default function App() {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">THE OXIXO EDGE</span>
             <h2 className="text-3xl md:text-4xl font-extrabold mt-2 mb-4">
-              Traditional Agencies Are Too Slow. We Leverage AI.
+              Traditional Agencies Are Too Slow. We Combine Local Hearts With Modern Tech.
             </h2>
             <p className="text-slate-400 text-sm md:text-base">
-              By combining elite engineering frameworks with premium aesthetic standards, OXIXO yields 3x the output at a fraction of local market prices.
+              Headquartered in the heart of Kerala, OXIXO brings together talented local creators and smart AI tools. We make premium marketing affordable and accessible for every single business in our homeland.
             </p>
           </div>
 
@@ -1523,9 +1523,9 @@ export default function App() {
               <div className="w-12 h-12 bg-[#D4AF37]/10 text-[#D4AF37] rounded-xl flex items-center justify-center mb-6 border border-[#D4AF37]/20">
                 <Sparkles className="w-6 h-6 stroke-[1.5]" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-white">AI-Driven Speed & Avatars</h3>
+              <h3 className="font-bold text-lg mb-3 text-white">Warm, Local AI Characters</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Rather than coordinating expensive actors and sets, we deploy high-converting photorealistic digital characters. This lets us draft, test, and render custom ad variations within hours instead of weeks.
+                Skip expensive film crews, actors, and complex shoots. We utilize friendly, photorealistic digital avatars speaking natural Malayalam, English, or Hindi to connect personally with Kerala customers within days.
               </p>
             </div>
 
@@ -1534,9 +1534,9 @@ export default function App() {
               <div className="w-12 h-12 bg-[#F33A6A]/10 text-[#F33A6A] rounded-xl flex items-center justify-center mb-6 border border-[#F33A6A]/20">
                 <TrendingUp className="w-6 h-6 stroke-[1.5]" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-white">Consolidated Performance Suite</h3>
+              <h3 className="font-bold text-lg mb-3 text-white">Fully Tailored Local Strategy</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Most agencies do only one thing. We synchronize everything: posters, videos, scheduling, and Meta optimizations. A unified campaign approach leads to better data capture and significantly lower conversion costs.
+                We don't just use automated templates. We plan your visual branding, write heartfelt scripts, manage daily Instagram postings, and launch Meta Ads specifically for the Kerala market as one simple, cohesive package.
               </p>
             </div>
 
@@ -1545,9 +1545,9 @@ export default function App() {
               <div className="w-12 h-12 bg-[#D4AF37]/10 text-[#D4AF37] rounded-xl flex items-center justify-center mb-6 border border-[#D4AF37]/20">
                 <ShieldCheck className="w-6 h-6 stroke-[1.5]" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-white">Complete Transparency</h3>
+              <h3 className="font-bold text-lg mb-3 text-white">Friendly, Direct Support</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                No complex retainer fees or surprise setup costs. We outline deliverables with precision and back our outputs with an intuitive performance report so you see exactly where your conversions are coming from.
+                No corporate jargon or surprise charges here. We believe in high transparency, clear pricing, and regular phone/WhatsApp updates. We talk to you like a true partner would.
               </p>
             </div>
 
@@ -1581,12 +1581,12 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">REAL CLIENT SUCCESS</span>
+            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">LOCAL SUCCESS STORIES</span>
             <h2 className="text-3xl font-extrabold text-[#1A1A1A] mt-2 mb-4">
-              Validated by Ambitious Brands
+              Trusted by Business Owners in Kerala
             </h2>
             <p className="text-slate-500 text-sm md:text-base">
-              See how local and digital businesses are scaling using the OXIXO AI marketing model.
+              See how local stores, boutiques, and clinics are finding real customers and getting quality WhatsApp leads with our team.
             </p>
           </div>
 
@@ -1599,16 +1599,16 @@ export default function App() {
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
                 <p className="text-slate-600 text-sm md:text-base italic leading-relaxed mb-6">
-                  "The AI avatar videos are game-changing. We got 2 premium voiceover ad reels that generated over 300+ inquiries in our first week on Meta! Highly recommend the Complete Growth Bundle."
+                  "The AI character videos in Malayalam were a total game-changer for us. We got 2 beautiful ad reels that brought in over 350+ WhatsApp inquiries for our premium furniture store in the very first week! The ₹10,000 bundle paid for itself in days."
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
                 <div className="w-10 h-10 rounded-full bg-[#F33A6A]/10 flex items-center justify-center font-bold text-[#F33A6A]">
-                  RV
+                  AJ
                 </div>
                 <div>
-                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Rohan Varma</p>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Founder, LuxDecor Furnishings</p>
+                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Albin Joseph</p>
+                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Owner, Malabar Wood Crafts</p>
                 </div>
               </div>
             </div>
@@ -1620,16 +1620,16 @@ export default function App() {
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
                 <p className="text-slate-600 text-sm md:text-base italic leading-relaxed mb-6">
-                  "The original estimate with individual agencies was close to ₹20K per month. With OXIXO, we got the posters, full ad setups, and reports for just ₹10,000. Saved money and scaled sales by 60%."
+                  "We used to pay high monthly fees to traditional agencies for basic post designs. With OXIXO, we got high-quality boutique posters, AI videos, and actual Facebook ads setup for just ₹10,000. Our boutique sales increased by 65%!"
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
                 <div className="w-10 h-10 rounded-full bg-[#F33A6A]/10 flex items-center justify-center font-bold text-[#F33A6A]">
-                  NK
+                  FS
                 </div>
                 <div>
-                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Neha Kapoor</p>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Marketing Lead, FitFuel Nutrition</p>
+                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Fathima Shahana</p>
+                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Founder, Shahana's Designer Boutique, Kozhikode</p>
                 </div>
               </div>
             </div>
@@ -1641,16 +1641,16 @@ export default function App() {
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
                 </div>
                 <p className="text-slate-600 text-sm md:text-base italic leading-relaxed mb-6">
-                  "The Monthly Performance Reports are incredible. Instead of confusing spreadsheets, they give 3 concrete optimizations that actually make sense. Absolute clarity on every rupee spent."
+                  "Their Monthly Performance Reports are super easy to understand—no confusing technical terms. They gave us 3 straightforward tips that helped double our local clinic appointments. We love working with a team from our own home state."
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
                 <div className="w-10 h-10 rounded-full bg-[#F33A6A]/10 flex items-center justify-center font-bold text-[#F33A6A]">
-                  AS
+                  MK
                 </div>
                 <div>
-                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Aman Singhania</p>
-                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Director, Singhania Jewellers</p>
+                  <p className="font-bold text-xs md:text-sm text-[#1A1A1A]">Dr. Manoj Kumar</p>
+                  <p className="text-[10px] text-slate-400 font-semibold uppercase">Director, Care Dental Clinic, Kochi</p>
                 </div>
               </div>
             </div>
@@ -1665,12 +1665,12 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">EFFORTLESS COOPERATION</span>
+            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">OUR SIMPLE PROCESS</span>
             <h2 className="text-3xl font-extrabold text-[#1A1A1A] mt-2 mb-3">
-              How We Launch Your Growth Funnel
+              4 Days to Launch Your Campaigns
             </h2>
             <p className="text-slate-500 text-sm">
-              From form submission to live sales setup, we have optimized our pipeline to just 4 days.
+              No stressful process or complicated corporate terms. We handle everything with care straight from Kochi.
             </p>
           </div>
 
@@ -1681,9 +1681,9 @@ export default function App() {
               <span className="absolute -left-3.5 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/40 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs">
                 1
               </span>
-              <h3 className="font-bold text-slate-800 text-base md:text-lg">Submit Lead Details</h3>
+              <h3 className="font-bold text-slate-800 text-base md:text-lg">Share Your Business Details</h3>
               <p className="text-slate-500 text-sm mt-1">
-                Fill the simple order form below indicating your preferred package. There is no upfront pre-payment.
+                Fill the friendly inquiry form below indicating what you need. There is absolutely no prepayment required to get started.
               </p>
             </div>
 
@@ -1692,9 +1692,9 @@ export default function App() {
               <span className="absolute -left-3.5 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/40 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs">
                 2
               </span>
-              <h3 className="font-bold text-slate-800 text-base md:text-lg">15-Minute WhatsApp Alignment</h3>
+              <h3 className="font-bold text-slate-800 text-base md:text-lg">Friendly 15-Minute WhatsApp Chat</h3>
               <p className="text-slate-500 text-sm mt-1">
-                We will immediately reach out to you on WhatsApp to understand your brand identity, product niche, and target goals.
+                Our team in Kerala will reach out to you on WhatsApp to understand your product, talk about your audience, and align on goals.
               </p>
             </div>
 
@@ -1703,9 +1703,9 @@ export default function App() {
               <span className="absolute -left-3.5 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/40 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs">
                 3
               </span>
-              <h3 className="font-bold text-slate-800 text-base md:text-lg">Asset Drafting & Rendering</h3>
+              <h3 className="font-bold text-slate-800 text-base md:text-lg">Creative Drafting & Video Production</h3>
               <p className="text-slate-500 text-sm mt-1">
-                Our design and voice synthesizer tools draft your high-converting posters and photorealistic character video scripts for approval.
+                We draft your gorgeous posters and script your AI character video in Malayalam or English, sending them to you for feedback.
               </p>
             </div>
 
@@ -1714,9 +1714,9 @@ export default function App() {
               <span className="absolute -left-3.5 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37]/40 w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs">
                 4
               </span>
-              <h3 className="font-bold text-slate-800 text-base md:text-lg">Meta Ad Setup & Launch</h3>
+              <h3 className="font-bold text-slate-800 text-base md:text-lg">Facebook & Instagram Ads Launch</h3>
               <p className="text-slate-500 text-sm mt-1">
-                We integrate your conversion pixel, load the optimized target demographic, and trigger your campaigns to begin receiving client inquires.
+                We configure your ad tracking, set up targeting for specific districts in Kerala, and launch your ads to start bringing in real leads.
               </p>
             </div>
 
@@ -1730,12 +1730,12 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">SECURE ORDER FORM</span>
+            <span className="text-xs font-bold tracking-widest text-[#D4AF37] uppercase">SECURE INQUIRY FORM</span>
             <h2 className="text-3xl font-extrabold text-[#1A1A1A] mt-2 mb-3">
-              Begin Your Journey to Scale
+              Grow Your Business Today
             </h2>
             <p className="text-slate-500 text-xs md:text-sm">
-              Enter your details below. Once submitted, our team will review your business and ping you on WhatsApp within minutes to initiate the alignment.
+              Enter your details below. Once submitted, our team based in Kerala will study your business and reach out to you on WhatsApp to discuss your path to success!
             </p>
           </div>
 
@@ -1901,24 +1901,24 @@ export default function App() {
                   <div className="flex gap-3 items-start">
                     <CheckCircle2 className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs md:text-sm font-bold text-white">No Hidden Retention Caps</p>
-                      <p className="text-slate-400 text-[11px] mt-0.5">The pricing you see here is fully transparent. Revisions are included.</p>
+                      <p className="text-xs md:text-sm font-bold text-white">100% Honest & Transparent Pricing</p>
+                      <p className="text-slate-400 text-[11px] mt-0.5">We never charge surprise setup fees or high retainer percentages. Everything is fully agreed upfront.</p>
                     </div>
                   </div>
 
                   <div className="flex gap-3 items-start">
                     <CheckCircle2 className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs md:text-sm font-bold text-white">Full Rights Allocation</p>
-                      <p className="text-slate-400 text-[11px] mt-0.5">All generated posters, scripts, templates, and video files belong 100% to your brand.</p>
+                      <p className="text-xs md:text-sm font-bold text-white">Complete Creative Ownership</p>
+                      <p className="text-slate-400 text-[11px] mt-0.5">Every custom poster, AI video script, Malayalam voiceover recording, and visual asset is 100% yours forever.</p>
                     </div>
                   </div>
 
                   <div className="flex gap-3 items-start">
                     <CheckCircle2 className="w-5 h-5 text-[#D4AF37] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs md:text-sm font-bold text-white">Priority Technical Support</p>
-                      <p className="text-slate-400 text-[11px] mt-0.5">Direct chat access to your campaign managers throughout active runtimes.</p>
+                      <p className="text-xs md:text-sm font-bold text-white">Direct Support from Kerala HQ</p>
+                      <p className="text-slate-400 text-[11px] mt-0.5">Direct phone and WhatsApp chat access to our core creative team. We are always just a call away!</p>
                     </div>
                   </div>
                 </div>
@@ -2019,10 +2019,10 @@ export default function App() {
                 <span className="font-extrabold text-lg tracking-wider text-white">OXIXO</span>
               </div>
               <p className="text-slate-400 text-xs md:text-sm max-w-sm">
-                Combining human design intelligence with state-of-the-art AI systems to yield consistent, compounding client revenue across standard marketing channels.
+                Kerala's premier AI-first creative agency. Combining local artistic hearts with smart AI tools to help businesses get real leads and customers across Meta & Instagram.
               </p>
               <p className="text-[11px] text-slate-500">
-                Registered office: OXIXO Digital Growth, Level 4, Prestige Tech Park, Bangalore, India.
+                Registered Headquarters: OXIXO Digital, Kochi, Kerala, India — Supporting local businesses across Kochi, Malappuram, Palakkad, Kozhikode, and beyond.
               </p>
             </div>
 

@@ -1,0 +1,5 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Sitemap: https://ais-pre-befkde7xmmnkck2im2eoei-591521654113.asia-east1.run.app/sitemap.xml
