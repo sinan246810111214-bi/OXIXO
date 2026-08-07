@@ -244,8 +244,11 @@ export default function App() {
   const [fullName, setFullName] = useState('');
   const [whatsappNumber, setWhatsappNumber] = useState('');
   const [businessName, setBusinessName] = useState('');
-  const [web3FormsKey, setWeb3FormsKey] = useState<string>(() => {
-    return localStorage.getItem('oxixo_web3forms_key') || '';
+  const [telegramBotToken, setTelegramBotToken] = useState<string>(() => {
+    return localStorage.getItem('oxixo_telegram_token') || '8797928378:AAGN2X1XrTa4hFxtDh9Qf-1PdSLSBz_vWEY';
+  });
+  const [telegramChatId, setTelegramChatId] = useState<string>(() => {
+    return localStorage.getItem('oxixo_telegram_chatid') || '7266477371';
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -576,48 +579,47 @@ export default function App() {
     // Track lead event or trigger conversion feedback
     console.log('Lead captured successfully:', newLead);
 
-    // Prepare Web3Forms payload
-    const activeKey = web3FormsKey || (import.meta as any).env.VITE_WEB3FORMS_ACCESS_KEY || localStorage.getItem('oxixo_web3forms_key') || '';
-    
-    if (activeKey) {
+    // Prepare Telegram payload
+    if (telegramBotToken && telegramChatId) {
       try {
         const serviceNames = selectedServices.map(sid => {
           const s = services.find(serv => serv.id === sid);
           return s ? s.name : sid;
         }).join(', ');
 
-        const response = await fetch('https://api.web3forms.com/submit', {
+        const text = `📬 <b>New Website Lead Captured!</b>\n\n` +
+                     `👤 <b>Name:</b> ${fullName}\n` +
+                     `📞 <b>WhatsApp:</b> +91 ${whatsappNumber}\n` +
+                     `💼 <b>Business:</b> ${businessName.trim() || 'N/A'}\n` +
+                     `📦 <b>Package:</b> ${isBundleSelected ? '🎁 Complete Growth Bundle' : '⚡ Custom Ala-Carte'}\n` +
+                     `🛠️ <b>Services:</b> ${serviceNames}\n` +
+                     `💰 <b>Total Price:</b> ₹${pricing.current.toLocaleString('en-IN')}\n` +
+                     `⏰ <b>Time:</b> ${newLead.timestamp}\n\n` +
+                     `📲 <a href="https://wa.me/91${whatsappNumber.replace(/\D/g, '')}"><b>Chat on WhatsApp</b></a>`;
+
+        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            access_key: activeKey,
-            subject: `🔥 New OXIXO Lead: ${fullName}`,
-            from_name: "OXIXO Lead Bot",
-            to_email: "officialoxixo@gmail.com",
-            "Client Name": fullName,
-            "WhatsApp Number": `+91 ${whatsappNumber}`,
-            "Business Name / Website": businessName.trim() || 'N/A',
-            "Package Selected": isBundleSelected ? '🎁 Complete Growth Bundle (Recommended)' : '⚡ Custom Ala-Carte',
-            "Selected Services": serviceNames,
-            "Total Price": `₹${pricing.current.toLocaleString('en-IN')}`,
-            "Timestamp": newLead.timestamp,
-            "Contact Client WhatsApp Link": `https://wa.me/91${whatsappNumber.replace(/\D/g, '')}`
+            chat_id: telegramChatId,
+            text: text,
+            parse_mode: 'HTML',
+            disable_web_page_preview: true
           })
         });
 
         const data = await response.json();
-        if (data.success) {
-          console.log('Web3Forms lead emailed successfully:', data);
+        if (data.ok) {
+          console.log('Telegram lead sent successfully:', data);
         } else {
-          console.error('Web3Forms submission failed:', data);
-          setSubmitError(data.message || 'Failed to send email via Web3Forms.');
+          console.error('Telegram submission failed:', data);
+          setSubmitError(data.description || 'Failed to send message via Telegram.');
         }
       } catch (err) {
-        console.error('Error submitting to Web3Forms:', err);
-        setSubmitError('Network error sending lead email. Saved locally in browser cache!');
+        console.error('Error submitting to Telegram:', err);
+        setSubmitError('Network error sending lead to Telegram. Saved locally in browser cache!');
       }
     }
 
@@ -655,42 +657,41 @@ export default function App() {
     // Track lead event or trigger conversion feedback
     console.log('Modal Lead captured successfully:', newLead);
 
-    // Prepare Web3Forms payload
-    const activeKey = web3FormsKey || (import.meta as any).env.VITE_WEB3FORMS_ACCESS_KEY || localStorage.getItem('oxixo_web3forms_key') || '';
-    
-    if (activeKey) {
+    // Prepare Telegram payload
+    if (telegramBotToken && telegramChatId) {
       try {
-        const response = await fetch('https://api.web3forms.com/submit', {
+        const text = `📬 <b>New [POPUP] Lead Captured!</b>\n\n` +
+                     `👤 <b>Name:</b> ${modalFullName}\n` +
+                     `📞 <b>WhatsApp:</b> +91 ${modalWhatsappNumber}\n` +
+                     `💼 <b>Business:</b> ${modalBusinessName.trim() || 'N/A'}\n` +
+                     `📦 <b>Package:</b> 🎁 Complete Growth Bundle (Popup Offer)\n` +
+                     `💰 <b>Total Price:</b> ₹10,000\n` +
+                     `⏰ <b>Time:</b> ${newLead.timestamp}\n\n` +
+                     `📲 <a href="https://wa.me/91${modalWhatsappNumber.replace(/\D/g, '')}"><b>Chat on WhatsApp</b></a>`;
+
+        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            access_key: activeKey,
-            subject: `🔥 [POPUP LEAD] OXIXO Lead: ${modalFullName}`,
-            from_name: "OXIXO Popup Lead Bot",
-            to_email: "officialoxixo@gmail.com",
-            "Client Name": modalFullName,
-            "WhatsApp Number": `+91 ${modalWhatsappNumber}`,
-            "Business Name / Website": modalBusinessName.trim() || 'N/A',
-            "Package Selected": '🎁 Complete Growth Bundle (Recommended - From Popup)',
-            "Total Price": `₹10,000`,
-            "Timestamp": newLead.timestamp,
-            "Contact Client WhatsApp Link": `https://wa.me/91${modalWhatsappNumber.replace(/\D/g, '')}`
+            chat_id: telegramChatId,
+            text: text,
+            parse_mode: 'HTML',
+            disable_web_page_preview: true
           })
         });
 
         const data = await response.json();
-        if (data.success) {
-          console.log('Web3Forms modal lead emailed successfully:', data);
+        if (data.ok) {
+          console.log('Telegram modal lead sent successfully:', data);
         } else {
-          console.error('Web3Forms modal submission failed:', data);
-          setModalSubmitError(data.message || 'Failed to send email via Web3Forms.');
+          console.error('Telegram modal submission failed:', data);
+          setModalSubmitError(data.description || 'Failed to send message via Telegram.');
         }
       } catch (err) {
-        console.error('Error submitting modal to Web3Forms:', err);
-        setModalSubmitError('Network error sending lead email. Saved locally in browser cache!');
+        console.error('Error submitting modal to Telegram:', err);
+        setModalSubmitError('Network error sending lead to Telegram. Saved locally in browser cache!');
       }
     }
 
@@ -2129,52 +2130,61 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Web3Forms Access Key Setup Card */}
+              {/* Telegram Bot Integration Settings Card */}
               <div className="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-5">
-                <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+                <div className="space-y-4">
                   <div className="space-y-1">
                     <h5 className="font-bold text-xs md:text-sm text-[#1A1A1A] flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-                      <span>Web3Forms Email Forwarding Configuration</span>
+                      <span>Telegram Bot Integration Config</span>
                     </h5>
                     <p className="text-[11px] text-slate-500 leading-relaxed">
-                      All lead submissions are configured to send directly to <strong className="text-slate-700">officialoxixo@gmail.com</strong>.
-                      To activate live email forwarding, paste your Web3Forms Access Key below.
+                      All lead submissions are configured to send directly to your Telegram channel or chat instantly.
                     </p>
                   </div>
-                  <div className="w-full md:w-auto flex items-center gap-2">
-                    <input 
-                      type="password"
-                      value={web3FormsKey}
-                      onChange={(e) => {
-                        setWeb3FormsKey(e.target.value);
-                        localStorage.setItem('oxixo_web3forms_key', e.target.value);
-                      }}
-                      placeholder="Paste Web3Forms Access Key..."
-                      className="w-full md:w-64 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-[#D4AF37] font-mono text-[#1A1A1A]"
-                    />
-                    <a 
-                      href="https://web3forms.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-[10px] font-bold text-white bg-[#D4AF37] hover:bg-[#C19C2B] py-1.5 px-3 rounded-lg transition-colors whitespace-nowrap flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>Get Free Key</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-600 block">Telegram Bot Token</label>
+                      <input 
+                        type="password"
+                        value={telegramBotToken}
+                        onChange={(e) => {
+                          setTelegramBotToken(e.target.value);
+                          localStorage.setItem('oxixo_telegram_token', e.target.value);
+                        }}
+                        placeholder="Paste Telegram Bot Token..."
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#D4AF37] font-mono text-[#1A1A1A]"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-600 block">Telegram Chat ID</label>
+                      <input 
+                        type="text"
+                        value={telegramChatId}
+                        onChange={(e) => {
+                          setTelegramChatId(e.target.value);
+                          localStorage.setItem('oxixo_telegram_chatid', e.target.value);
+                        }}
+                        placeholder="Paste Telegram Chat ID..."
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#D4AF37] font-mono text-[#1A1A1A]"
+                      />
+                    </div>
                   </div>
+
+                  {telegramBotToken && telegramChatId ? (
+                    <p className="text-[10px] text-emerald-600 font-bold mt-2 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Live Telegram Bot Active! Lead notifications will be sent to Chat ID: {telegramChatId} instantly.</span>
+                    </p>
+                  ) : (
+                    <p className="text-[10px] text-rose-500 font-bold mt-2 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      <span>Live routing offline. Please configure both Bot Token and Chat ID to receive instant lead notifications.</span>
+                    </p>
+                  )}
                 </div>
-                {web3FormsKey ? (
-                  <p className="text-[10px] text-emerald-600 font-bold mt-2 flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Live Web3Forms Email Routing Active! Leads will be sent to officialoxixo@gmail.com instantly.</span>
-                  </p>
-                ) : (
-                  <p className="text-[10px] text-rose-500 font-bold mt-2 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    <span>Live routing offline. Leads are only saved in your browser's local storage. Please get a free key to activate email alerts.</span>
-                  </p>
-                )}
               </div>
 
               {/* Search Bar */}
