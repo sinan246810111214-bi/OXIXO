@@ -491,6 +491,15 @@ export default function App() {
     document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Claim Anniversary Offer and scroll directly to checkout contact form
+  const handleClaimOffer = () => {
+    setSelectedServices(services.map(s => s.id));
+    setIsBundleSelected(true);
+    
+    // Smooth scroll to checkout contact form
+    document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   // Select custom ala-carte plan
   const handleSelectCustom = () => {
     setIsBundleSelected(false);
@@ -923,12 +932,23 @@ export default function App() {
               </div>
             </div>
 
+            {/* Special Quick Action button inside Offer Banner Card */}
+            <div className="mt-6">
+              <button
+                onClick={handleClaimOffer}
+                className="w-full bg-gradient-to-r from-[#F33A6A] to-[#D4AF37] hover:from-[#e22b5b] hover:to-[#c19c2b] text-white font-black text-sm md:text-base py-4 px-6 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer animate-pulse"
+              >
+                <span>🎁 Claim Limited 41% Anniversary Offer & Fill Contact Form</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+
           </div>
 
           {/* CTA Group */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <button 
-              onClick={handleSelectBundle}
+              onClick={handleClaimOffer}
               className="w-full sm:w-auto bg-[#1A1A1A] hover:bg-black text-white text-base font-bold px-8 py-4 rounded-xl border border-[#D4AF37] shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Get the Complete Bundle (₹10,000)</span>
